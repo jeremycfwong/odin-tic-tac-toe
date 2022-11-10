@@ -8,7 +8,19 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div class="modal-view">
+        <div class="modal-content">
+            <h1>The Tic, The Tac, and The Toe</h1>
+            <form action="" method="post" id="Form">
+                <label for="title">Enter Player One Name: </label>
+                <input type="text" id='player-one' required>
+                <label for="title">Enter Player Two Name: </label>
+                <input type="text" id='player-two' required>
+                <button onclick="getBookData()">Start Game!</button>
+            </form>
+        </div>
+    </div>
+
     <div class="board">
         <p class="block"></p>
         <p class="block"></p>

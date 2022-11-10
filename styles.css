@@ -2,8 +2,13 @@
     font-family: sans-serif;
 }
 
+body {
+    margin: 0;
+}
+
 .board {
     margin: 0 auto;
+    padding-top: 5rem;
     width: 25rem;
     height: 25rem;
     display: grid;
@@ -18,3 +23,50 @@
     font-size: 3rem;
     margin: 0;
 }
+
+.modal-view {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    padding-top: 10rem;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+    .modal-content {
+        background-color: antiquewhite;
+        margin: auto;
+        padding: 2rem;
+        border: 1px solid black;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-content .close {
+        align-self: flex-end;
+        font-size: 2rem;
+    }
+
+    .modal-content form {
+        align-self: center;
+        width: 80%;
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 3fr;
+        gap: 2rem;
+    }
+
+    .modal-content input {
+        border-radius: 10px;
+        border: none;
+        background-color: rgb(209, 197, 181);
+        text-indent: .75rem;
+        height: 1.5rem;
+        font-size: 1.25rem;
+    }
+
+    #number-picker{
+        -moz-appearance: textfield;
+    }

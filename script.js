@@ -29,12 +29,18 @@ const GameFlow = (() => {
     var board = GameBoard;
     board.createBoard()
     
+    const startGame = function(){
+        startRound();
+        Array.from(blockElements).forEach(function(block, index){
+            block.setAttribute('id',index)
+            currentPlayer = playerOne;
+        })
+    }
+
     const startRound = function(){
         Array.from(blockElements).forEach(function(block, index){
             block.innerText = '';
             block.addEventListener('click', playerMove)
-            block.setAttribute('id',index)
-            currentPlayer = playerOne;
         })
     }
 
@@ -56,9 +62,14 @@ const GameFlow = (() => {
 
     const checkGame = function(board) {
         if(checkColumn(board)||checkDiag(board)||checkRow(board)){
-            //Winning condition
-            GameFlow.startRound();
-        }
+            // !!! Winning condition
+            console.log("its a win")
+            startRound();
+
+        } else if (board.every((value) => value != '')){
+            // game tie
+            console.log("its a tie")
+        } 
     }
 
     function checkRow (board) {
@@ -114,6 +125,6 @@ const GameFlow = (() => {
         }
 
 
-    return {startRound}
+    return {startGame}
 })();
 
