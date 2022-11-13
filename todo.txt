@@ -1,2 +1,1 @@
-1. Add restart button in board level view
-2. Look into minmax theory
+1. Look into minmax theory

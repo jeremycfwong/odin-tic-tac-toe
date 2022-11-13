@@ -8,7 +8,9 @@ const GameBoard = (() => {
     }
 
     const resetBoard = function() {
-        board.length=0
+        board.forEach(function(_, index) {
+            board[index] = ""
+        })
     }
 
     const markBoard = function(position, mark) {
@@ -57,7 +59,6 @@ const GameFlow = (() => {
 
     const newRound = function(){
         board.resetBoard()
-        board.createBoard()
         console.log(board)
         document.getElementById('alert').style.display = "none";
         startRound()

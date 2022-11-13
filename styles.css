@@ -103,3 +103,17 @@ body {
             border-radius: 2rem;
         }
 
+.main-view {
+    display: flex;
+    flex-direction: column;
+}
+
+#reset {
+    margin-top: 3rem;
+    width: 5rem;
+    align-self: center;
+    background-color: antiquewhite;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 2rem;
+}
