@@ -1,47 +1,66 @@
 const GameBoard = (() => {
     var board = []
-    const getBoard = board;
+    var getBoard = board;
     const createBoard = function(){
         for (var i=0; i < 9; i++){
             board.push('')
         }
+    }
 
-        return board
+    const resetBoard = function() {
+        board.length=0
     }
 
     const markBoard = function(position, mark) {
         board[position] = mark
     }
     
-    return { createBoard, markBoard, getBoard}
+    return { createBoard, markBoard, getBoard, resetBoard}
 })();
 
-const Player = (mark) => {
-    let playerMark = mark;
-    return {playerMark}
-};
+const Player = (mark, name) => {return {mark, name}};
 
 const GameFlow = (() => {
     var blockElements = document.getElementsByClassName('block');
-    var playerOne = Player('X');
-    var playerTwo = Player('O');
+    var playerOne;
+    var playerTwo;
     var currentPlayer = playerOne;
     var board = GameBoard;
     board.createBoard()
+
+
+    const getName = function() {
+        playerOneName = document.getElementById('player-one').value;
+        playerOne = Player('X', playerOneName);
+        playerTwoName = document.getElementById('player-two').value;
+        playerTwo = Player('O', playerTwoName);
+
+        document.getElementById('modal').style.display = "none";
+
+        startGame();
+    }
     
     const startGame = function(){
-        startRound();
         Array.from(blockElements).forEach(function(block, index){
             block.setAttribute('id',index)
-            currentPlayer = playerOne;
         })
+        startRound();
     }
 
     const startRound = function(){
-        Array.from(blockElements).forEach(function(block, index){
+        Array.from(blockElements).forEach(function(block){
             block.innerText = '';
+            currentPlayer = playerOne;
             block.addEventListener('click', playerMove)
         })
+    }
+
+    const newRound = function(){
+        board.resetBoard()
+        board.createBoard()
+        console.log(board)
+        document.getElementById('alert').style.display = "none";
+        startRound()
     }
 
     const nextPlayer = function() {
@@ -53,23 +72,31 @@ const GameFlow = (() => {
 
     const playerMove = function() {
         if (this.innerText == ''){
-            this.innerText = currentPlayer.playerMark
-            board.markBoard(this.id, currentPlayer.playerMark);
+            this.innerText = currentPlayer.mark
+            board.markBoard(this.id, currentPlayer.mark);
             checkGame(board.getBoard)
             nextPlayer();
         }
     }
 
     const checkGame = function(board) {
+        
+        var alert = document.getElementById('alert-message')
         if(checkColumn(board)||checkDiag(board)||checkRow(board)){
-            // !!! Winning condition
-            console.log("its a win")
-            startRound();
+            if(currentPlayer == playerOne){
+                alert.innerText = "You Win!"
+            } else {
+                alert.innerText = "You Lose!"
+            }
+            document.getElementById('alert').style.display = "block";
 
         } else if (board.every((value) => value != '')){
             // game tie
-            console.log("its a tie")
+            alert.innerText = "Its a Tie!"
+            document.getElementById('alert').style.display = "block";
         } 
+
+        
     }
 
     function checkRow (board) {
@@ -125,6 +152,6 @@ const GameFlow = (() => {
         }
 
 
-    return {startGame}
+    return {getName, newRound}
 })();
 

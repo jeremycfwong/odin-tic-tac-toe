@@ -1,5 +1,2 @@
-1. Link up player name logic
-2. Link up start game with player game logic (maybe new object)
-3. Add restart button in board level view
-4. Declare winner with alert
-5. Look into minmax theory
+1. Add restart button in board level view
+2. Look into minmax theory

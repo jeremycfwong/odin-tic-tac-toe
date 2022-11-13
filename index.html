@@ -8,16 +8,23 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="modal-view">
+    <div class="modal-view" id="modal">
         <div class="modal-content">
             <h1>The Tic, The Tac, and The Toe</h1>
-            <form action="" method="post" id="Form">
+            <form id="Form" onsubmit="return false;">
                 <label for="title">Enter Player One Name: </label>
                 <input type="text" id='player-one' required>
                 <label for="title">Enter Player Two Name: </label>
                 <input type="text" id='player-two' required>
-                <button onclick="getBookData()">Start Game!</button>
+                <button onclick="GameFlow.getName()">Start Game!</button>
             </form>
+        </div>
+    </div>
+
+    <div class="alert-view" id="alert">
+        <div class="alert-card">
+            <p class="alertMessage" id="alert-message">you win!</p>
+            <div class="confirm-btn" onclick="GameFlow.newRound()">Next Game</div>
         </div>
     </div>
 
