@@ -192,15 +192,14 @@ const tester = (() => {
                 }
             }
         }
-
-        return moves[optimal]
+        return moves[optimal];
     }
 
     function minmax(board, findingMax = true, depth = 0){
         if (GameFlow.endCheck(board.getBoard())) {
             if (GameFlow.endCheck(board.getBoard()).winner == "tie"){
                 return {score: 0}
-            } else if (findingMax){
+            } else if (!findingMax){
                 return {score: 10 - depth}
             } else {
                 return {score: -10 + depth}
@@ -210,15 +209,15 @@ const tester = (() => {
         let moves = [];
         board.availableMoves().forEach(index =>{
             let move = {};
-            move.index = index
-
-            board.markBoard(index, 'X')
+            move.index = index;
 
             if(!findingMax){
-                var rating = minmax(board, false, depth + 1)
+                board.markBoard(index, 'O');
+                var rating = minmax(board, true, depth + 1)
                 move.score = rating.score
             } else {
-                var rating = minmax(board, true, depth + 1)
+                board.markBoard(index, 'X');
+                var rating = minmax(board, false, depth + 1)
                 move.score = rating.score
             }
 
