@@ -1,6 +1,6 @@
 const GameBoard = (() => {
     var board = []
-    var getBoard = board;
+    var getBoard = () => board;
     const createBoard = function(){
         for (var i=0; i < 9; i++){
             board.push('')
@@ -16,8 +16,19 @@ const GameBoard = (() => {
     const markBoard = function(position, mark) {
         board[position] = mark
     }
+
+    const availableMoves = function() {
+        var availableSet = []
+        board.forEach(function(element,index){
+             if (element == ""){
+                availableSet.push(index)
+             }
+        })
+
+        return availableSet
+    }
     
-    return { createBoard, markBoard, getBoard, resetBoard}
+    return { createBoard, markBoard, getBoard, resetBoard, availableMoves}
 })();
 
 const Player = (mark, name) => {return {mark, name}};
@@ -75,13 +86,13 @@ const GameFlow = (() => {
         if (this.innerText == ''){
             this.innerText = currentPlayer.mark
             board.markBoard(this.id, currentPlayer.mark);
-            checkGame(board.getBoard)
+            console.log(board.availableMoves())
+            checkGame(board.getBoard())
             nextPlayer();
         }
     }
 
     const checkGame = function(board) {
-        
         var alert = document.getElementById('alert-message')
         if(checkColumn(board)||checkDiag(board)||checkRow(board)){
             if(currentPlayer == playerOne){

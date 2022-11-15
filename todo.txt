@@ -1,1 +1,2 @@
 1. Look into minmax theory
+2. implement available moves
