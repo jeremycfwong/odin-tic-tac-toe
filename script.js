@@ -43,7 +43,7 @@ const GameFlow = (() => {
     boardObj.createBoard()
 
 
-    const getName = function() {
+    const initGame = function() {
         playerOneName = document.getElementById('player-one').value;
         playerOne = Player('X', playerOneName);
         playerTwoName = document.getElementById('player-two').value;
@@ -82,6 +82,12 @@ const GameFlow = (() => {
         })
     }
 
+    const AIMove = function() {
+        let index = AILogic.minmax(boardObj).index
+        boardObj.markBoard(index, "X")
+        blockElements[index].innerText = "X"
+    }
+
     const playerMove = function() {
         if (this.innerText == ''){
             this.innerText = currentPlayer.mark
@@ -93,8 +99,6 @@ const GameFlow = (() => {
     }
 
     const checkGame = function(board) {
-        console.log(tester.minmax(boardObj))
-
         if(checkColumn(board)||checkDiag(board)||checkRow(board)){
             if(currentPlayer == playerOne){
                 alert.innerText = "You Win!"
@@ -104,7 +108,6 @@ const GameFlow = (() => {
             document.getElementById('alert').style.display = "block";
 
         } else if (board.every((value) => value != '')){
-            // game tie
             alert.innerText = "Its a Tie!"
             document.getElementById('alert').style.display = "block";
         } 
@@ -169,10 +172,10 @@ const GameFlow = (() => {
         }
 
 
-    return {getName, newRound, endCheck}
+    return {initGame, newRound, endCheck}
 })();
 
-const tester = (() => {
+const AILogic = (() => {
     function bestMove(moves, findingMax){
         var optimal;
         if(findingMax){

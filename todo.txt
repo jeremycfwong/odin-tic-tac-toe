@@ -1,3 +1,4 @@
-1. Implement minmax base case
-2. Implement minmax
-3. Implement depth
+1. Remove hardcoded X and O to make minmax bot flexible
+2. Add choice for user to choose their preferred mark
+3. 2 player mode 
+4. Bot vs Human mode

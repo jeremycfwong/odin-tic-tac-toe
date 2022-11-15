@@ -12,11 +12,18 @@
         <div class="modal-content">
             <h1>The Tic, The Tac, and The Toe</h1>
             <form id="Form" onsubmit="return false;">
+                <input type="radio" name="gameMode" id="versusBot" checked="checked"> 
+                <label for="versusBot">Against Bot</label>
+                <input type="radio" name="gameMode" id="versusPlayer"> 
+                <label for="versusPlayer">Two Player</label>
                 <label for="title">Enter Player One Name: </label>
                 <input type="text" id='player-one' required>
-                <label for="title">Enter Player Two Name: </label>
-                <input type="text" id='player-two' required>
-                <button onclick="GameFlow.getName()">Start Game!</button>
+                <div class="player-two-option">
+                    <label for="title">Enter Player Two Name: </label>
+                    <input type="text" id='player-two' required>
+                </div>
+               
+                <button onclick="GameFlow.initGame()">Start Game!</button>
             </form>
         </div>
     </div>

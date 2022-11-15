@@ -70,6 +70,10 @@ body {
         -moz-appearance: textfield;
     }
 
+    .player-two-option{
+        display: none;
+    }
+
 #alert {
     display: none;
     z-index: 2;
