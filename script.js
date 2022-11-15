@@ -35,11 +35,12 @@ const Player = (mark, name) => {return {mark, name}};
 
 const GameFlow = (() => {
     var blockElements = document.getElementsByClassName('block');
+    var alert = document.getElementById('alert-message')
     var playerOne;
     var playerTwo;
     var currentPlayer = playerOne;
-    var board = GameBoard;
-    board.createBoard()
+    var boardObj = GameBoard;
+    boardObj.createBoard()
 
 
     const getName = function() {
@@ -69,8 +70,7 @@ const GameFlow = (() => {
     }
 
     const newRound = function(){
-        board.resetBoard()
-        console.log(board)
+        boardObj.resetBoard()
         document.getElementById('alert').style.display = "none";
         startRound()
     }
@@ -85,15 +85,16 @@ const GameFlow = (() => {
     const playerMove = function() {
         if (this.innerText == ''){
             this.innerText = currentPlayer.mark
-            board.markBoard(this.id, currentPlayer.mark);
-            console.log(board.availableMoves())
-            checkGame(board.getBoard())
+            boardObj.markBoard(this.id, currentPlayer.mark);
+            console.log(boardObj.availableMoves())
+            checkGame(boardObj.getBoard())
             nextPlayer();
         }
     }
 
     const checkGame = function(board) {
-        var alert = document.getElementById('alert-message')
+        console.log(tester.minmax(boardObj))
+
         if(checkColumn(board)||checkDiag(board)||checkRow(board)){
             if(currentPlayer == playerOne){
                 alert.innerText = "You Win!"
@@ -107,8 +108,14 @@ const GameFlow = (() => {
             alert.innerText = "Its a Tie!"
             document.getElementById('alert').style.display = "block";
         } 
+    }
 
-        
+    const endCheck = function(board) {
+        if(checkColumn(board)||checkDiag(board)||checkRow(board)){
+            return true
+        } else if (board.every((value) => value != '')){
+           return {'winner' : 'tie'}
+        } 
     }
 
     function checkRow (board) {
@@ -117,12 +124,10 @@ const GameFlow = (() => {
             for (var j = i; j < i+3; j++){
                 row.push(board[j])
             }
-            console.log(row)
             if (row.every((value) => value == row[0] && row[0] != '')){
                 return true
             }
         }
-
         return false;
     }
 
@@ -164,6 +169,67 @@ const GameFlow = (() => {
         }
 
 
-    return {getName, newRound}
+    return {getName, newRound, endCheck}
 })();
 
+const tester = (() => {
+    function bestMove(moves, findingMax){
+        var optimal;
+        if(findingMax){
+            let max = -100;
+            for (let i = 0; i < moves.length; i++){
+                if (moves[i].score > max){
+                    max = moves[i].score;
+                    optimal = i
+                }
+            }
+        } else {
+            let min = 100;
+            for (let i = 0; i < moves.length; i++){
+                if (moves[i].score < min){
+                    min = moves[i].score;
+                    optimal = i
+                }
+            }
+        }
+
+        return moves[optimal]
+    }
+
+    function minmax(board, findingMax = true, depth = 0){
+        if (GameFlow.endCheck(board.getBoard())) {
+            if (GameFlow.endCheck(board.getBoard()).winner == "tie"){
+                return {score: 0}
+            } else if (findingMax){
+                return {score: 10 - depth}
+            } else {
+                return {score: -10 + depth}
+            }
+        }
+
+        let moves = [];
+        board.availableMoves().forEach(index =>{
+            let move = {};
+            move.index = index
+
+            board.markBoard(index, 'X')
+
+            if(!findingMax){
+                var rating = minmax(board, false, depth + 1)
+                move.score = rating.score
+            } else {
+                var rating = minmax(board, true, depth + 1)
+                move.score = rating.score
+            }
+
+            board.markBoard(index, '')
+
+            moves.push(move)
+        })
+
+        return bestMove(moves, findingMax)
+}
+
+return {minmax}
+    
+})();
