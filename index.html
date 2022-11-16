@@ -12,16 +12,29 @@
         <div class="modal-content">
             <h1>The Tic, The Tac, and The Toe</h1>
             <form id="Form" onsubmit="return false;">
-                <input type="radio" name="gameMode" id="versusBot" checked="checked"> 
-                <label for="versusBot">Against Bot</label>
-                <input type="radio" name="gameMode" id="versusPlayer"> 
-                <label for="versusPlayer">Two Player</label>
-                <label for="title">Enter Player One Name: </label>
-                <input type="text" id='player-one' required>
-                <div class="player-two-option">
+                <fieldset>
+                    <input type="radio" name="gameMode" id="versusBot" checked="checked" onclick="ModalController.togglePlayerTwo(false)"> 
+                    <label for="versusBot">Against Bot</label>
+                    <input type="radio" name="gameMode" id="versusPlayer" onclick="ModalController.togglePlayerTwo(true)"> 
+                    <label for="versusPlayer">Two Player</label>
+                </fieldset>
+
+                <fieldset id="player-choice">
+                    <input type="radio" name="playerMark" id="cross" checked="checked""> 
+                    <label for="versusBot">X</label>
+                    <input type="radio" name="playerMark" id="circle"> 
+                    <label for="versusPlayer">O</label>
+                </fieldset>
+                
+                <fieldset>
+                    <label for="title">Enter Player One Name: </label>
+                    <input type="text" id='player-one' required>
+                </fieldset>
+                
+                <fieldset id="player-two-option">
                     <label for="title">Enter Player Two Name: </label>
-                    <input type="text" id='player-two' required>
-                </div>
+                    <input type="text" id='player-two'>
+                </fieldset>
                
                 <button onclick="GameFlow.initGame()">Start Game!</button>
             </form>

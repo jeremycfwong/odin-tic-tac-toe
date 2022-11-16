@@ -39,21 +39,33 @@ const GameFlow = (() => {
     var playerOne;
     var playerTwo;
     var currentPlayer = playerOne;
+    var againstBot;
     var boardObj = GameBoard;
-    boardObj.createBoard()
-
+    boardObj.createBoard();
 
     const initGame = function() {
+        againstBot = document.getElementById('versusBot').checked
         playerOneName = document.getElementById('player-one').value;
-        playerOne = Player('X', playerOneName);
-        playerTwoName = document.getElementById('player-two').value;
-        playerTwo = Player('O', playerTwoName);
-
+        
+        if (againstBot){
+            var playerOneChoice = (document.getElementById('cross').checked)? 'X':'O';
+            var playerTwoChoice = (playerOneChoice == 'X')? 'O':'X';
+            console.log(playerOneChoice)
+            console.log(playerTwoChoice)
+            playerOne = Player(playerOneChoice, playerOneName);
+            playerTwoName = "Min-max Bot"
+            playerTwo = Player(playerTwoChoice, playerTwoName)
+        } else {
+            playerOne = Player('X', playerOneName);
+            playerTwoName = document.getElementById('player-two').value;
+            playerTwo = Player('O', playerTwoName);
+        }
+        
         document.getElementById('modal').style.display = "none";
 
         startGame();
     }
-    
+
     const startGame = function(){
         Array.from(blockElements).forEach(function(block, index){
             block.setAttribute('id',index)
@@ -67,12 +79,35 @@ const GameFlow = (() => {
             currentPlayer = playerOne;
             block.addEventListener('click', playerMove)
         })
+
+        if (playerOne.mark == 'O'){
+            AIMove()
+            checkGame(boardObj.getBoard())
+            currentPlayer = playerOne
+        }
     }
 
     const newRound = function(){
         boardObj.resetBoard()
         document.getElementById('alert').style.display = "none";
         startRound()
+    }
+
+    const playerMove = function() {
+        if (this.innerText == ''){
+            this.innerText = currentPlayer.mark
+            boardObj.markBoard(this.id, currentPlayer.mark);
+            checkGame(boardObj.getBoard())
+            
+            if(againstBot){
+                AIMove();
+                checkGame(boardObj.getBoard())
+                currentPlayer = playerOne
+            } else {
+                nextPlayer();
+            }
+
+        }
     }
 
     const nextPlayer = function() {
@@ -83,19 +118,16 @@ const GameFlow = (() => {
     }
 
     const AIMove = function() {
-        let index = AILogic.minmax(boardObj).index
-        boardObj.markBoard(index, "X")
-        blockElements[index].innerText = "X"
-    }
+        currentPlayer = playerTwo
+        var marks = {
+            "AI" : playerTwo.mark,
+            "Player" : playerOne.mark
+        };
 
-    const playerMove = function() {
-        if (this.innerText == ''){
-            this.innerText = currentPlayer.mark
-            boardObj.markBoard(this.id, currentPlayer.mark);
-            console.log(boardObj.availableMoves())
-            checkGame(boardObj.getBoard())
-            nextPlayer();
-        }
+        let index = AILogic.minmax(boardObj, marks).index
+        boardObj.markBoard(index, playerTwo.mark)
+        blockElements[index].innerText = playerTwo.mark
+        playerMove();
     }
 
     const checkGame = function(board) {
@@ -135,7 +167,6 @@ const GameFlow = (() => {
     }
 
     function checkColumn (board) {
-
         for(var i = 0; i < 3; i++){
             var column = []
             for(var j = i; j <= i+6; j += 3){
@@ -150,7 +181,6 @@ const GameFlow = (() => {
     }
 
     function checkDiag(board) {
-      
         var diag = [];
         for(var i = 0; i <= 8; i += 4){
             diag.push(board[i])
@@ -170,7 +200,6 @@ const GameFlow = (() => {
         
         return false
         }
-
 
     return {initGame, newRound, endCheck}
 })();
@@ -198,7 +227,7 @@ const AILogic = (() => {
         return moves[optimal];
     }
 
-    function minmax(board, findingMax = true, depth = 0){
+    function minmax(board, marks , findingMax = true, depth = 0){
         if (GameFlow.endCheck(board.getBoard())) {
             if (GameFlow.endCheck(board.getBoard()).winner == "tie"){
                 return {score: 0}
@@ -215,12 +244,12 @@ const AILogic = (() => {
             move.index = index;
 
             if(!findingMax){
-                board.markBoard(index, 'O');
-                var rating = minmax(board, true, depth + 1)
+                board.markBoard(index, marks.Player);
+                var rating = minmax(board, marks, true, depth + 1)
                 move.score = rating.score
             } else {
-                board.markBoard(index, 'X');
-                var rating = minmax(board, false, depth + 1)
+                board.markBoard(index, marks.AI);
+                var rating = minmax(board, marks, false, depth + 1)
                 move.score = rating.score
             }
 
@@ -234,4 +263,17 @@ const AILogic = (() => {
 
 return {minmax}
     
+})();
+
+const ModalController = (() => {
+    var player2field = document.getElementById('player-two-option')
+    var choiceField = document.getElementById('player-choice')
+
+    function togglePlayerTwo(toggle){
+        player2field.style.display = toggle? 'block': 'none';
+        choiceField.style.display = toggle? 'none': 'block';
+        return
+    }
+
+    return {togglePlayerTwo}
 })();

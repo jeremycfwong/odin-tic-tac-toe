@@ -1,4 +1,1 @@
-1. Remove hardcoded X and O to make minmax bot flexible
-2. Add choice for user to choose their preferred mark
-3. 2 player mode 
-4. Bot vs Human mode
+1. Clean up the code and reduce repeated parts
